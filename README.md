@@ -1,2 +1,2 @@
-# react-todomvc-flux
-React TodoMVC Example (Flux)
+# ReactJS TodoMVC (Flux)
+React TodoMVC Example
