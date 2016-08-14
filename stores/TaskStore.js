@@ -5,7 +5,8 @@ import EventEmitter from 'events';
 const CHANGE_EVENT = 'change';
 
 const create = (text) => {
-  let tasks = localStorage.getItem('tasks');
+  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
   tasks.push({
     id: (+new Date() + Math.floor(Math.random() * 999999)).toString(36),
     text: text,
@@ -13,11 +14,13 @@ const create = (text) => {
     created_at: new Date()
   });
 
-  localStorage.setItem('tasks', tasks);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
 const edit = (id, text) => {
-  let tasks = localStorage.getItem('tasks').map((task) => {
+  let tasks = JSON.parse(localStorage.getItem('tasks'));
+
+  tasks.map((task) => {
     if (task.id === id) {
       task.text = text;
     }
@@ -25,17 +28,19 @@ const edit = (id, text) => {
     return task;
   });
 
-  localStorage.setItem('tasks', tasks);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
 const remove = (id) => {
-  let tasks = localStorage.getItem('tasks').filter((task) => task.id !== id);
+  let tasks = JSON.parse(localStorage.getItem('tasks')).filter((task) => task.id !== id);
 
-  localStorage.setItem('tasks', tasks);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
 const toggleTask = (id) => {
-  let tasks = localStorage.getItem('tasks').map((task) => {
+  let tasks = JSON.parse(localStorage.getItem('tasks'));
+
+  tasks.map((task) => {
     if (task.id === id) {
       task.completed = !task.completed;
     }
@@ -43,32 +48,32 @@ const toggleTask = (id) => {
     return task;
   });
 
-  localStorage.setItem('tasks', tasks);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
-const toggleTasks = (value) => {
-  let tasks = localStorage.getItem('tasks').map((task) => {
-    if (task.id === id) {
-      task.completed = value;
-    }
+const toggleAllTasks = (value) => {
+  let tasks = JSON.parse(localStorage.getItem('tasks'));
+
+  tasks.map((task) => {
+    task.completed = value;
 
     return task;
   });
 
-  localStorage.setItem('tasks', tasks);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
 const removeCompleted = () => {
-  let tasks = localStorage.getItem('tasks').map((task) => !task.completed);
+  let tasks = JSON.parse(localStorage.getItem('tasks')).filter((task) => !task.completed);
 
-  localStorage.setItem('tasks', tasks);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
 class TaskStore extends EventEmitter {
 
   constructor() {
     super();
-    localStorage.setItem('tasks', []);
+    localStorage.setItem('tasks', JSON.stringify([]));
 
     AppDispatcher.register(this.handle.bind(this));
   }
@@ -86,7 +91,7 @@ class TaskStore extends EventEmitter {
   }
 
   getAll() {
-    return localStorage.getItem('tasks');
+    return JSON.parse(localStorage.getItem('tasks')) || [];
   }
 
   handle(payload) {
@@ -112,7 +117,7 @@ class TaskStore extends EventEmitter {
         break;
 
       case TodoConstants.TOGGLE_TASKS:
-        toggleTasks(value);
+        toggleAllTasks(payload.value);
         this.emitChange();
         break;
 

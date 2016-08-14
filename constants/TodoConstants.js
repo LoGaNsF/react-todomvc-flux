@@ -1,4 +1,4 @@
-export default TodoConstants = {
+const TodoConstants = {
   ADD_TASK: 'ADD_TASK',
   EDIT_TASK: 'EDIT_TASK',
   REMOVE_TASK: 'REMOVE_TASK',
@@ -6,3 +6,5 @@ export default TodoConstants = {
   TOGGLE_TASK: 'TOGGLE_TASK',
   TOGGLE_TASKS: 'TOGGLE_TASKS'
 };
+
+export default TodoConstants;

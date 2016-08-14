@@ -10,7 +10,7 @@ module.exports = {
     entry: {
         app: [
             'webpack/hot/dev-server',
-            './app.jsx'
+            './index.jsx'
         ]
     },
 
