@@ -73,7 +73,9 @@ class TaskStore extends EventEmitter {
 
   constructor() {
     super();
-    localStorage.setItem('tasks', JSON.stringify([]));
+
+    let data = localStorage.getItem('task') || [];
+    localStorage.setItem('tasks', JSON.stringify(data));
 
     AppDispatcher.register(this.handle.bind(this));
   }
